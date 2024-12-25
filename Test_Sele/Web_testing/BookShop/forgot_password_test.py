@@ -41,4 +41,29 @@ def test_forgot_password(driver):
     #Nhấn nút đổi mật khẩu
     driver.find_element(By.CLASS_NAME, "btn-primary").click()
     time.sleep(3)
+#TC02: Bỏ trống email rồi nhấn Forget Password
+def test_forgot_password_empty_email(driver):
+    go_to_sign_in_page(driver)
+    
+    driver.find_element(By.LINK_TEXT, "Forget Password?").click()
+    error_message = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.ID, "message"))
+    )
+    # Kiểm tra nội dung thông báo lỗi
+    assert error_message.text == "Invalid Email Address"
+    time.sleep(3)
+    
+#TC03: Nhập email chưa đăng ký
+def test_forgot_password_email_has_no_regis(driver):
+    go_to_sign_in_page(driver)
+    
+    driver.find_element(By.ID, "email").send_keys("alex6060@gmail.com")
+    
+    driver.find_element(By.LINK_TEXT, "Forget Password?").click()
+    error_message = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.ID, "message"))
+    )
+    # Kiểm tra nội dung thông báo lỗi
+    assert error_message.text == "Invalid Email Address"
+    time.sleep(3)
 

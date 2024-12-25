@@ -19,28 +19,29 @@ def driver():
 
 
 #TC01: Đổi mật khẩu thành công
+#TC01: Đổi mật khẩu thành công
 def test_forgot_password(driver):
-    autofill_login(driver, "alexson6060@gmail.com", "45439")
+    autofill_login(driver, "alexson6060@gmail.com", "14232")
     click_forgot_password(driver)
-    time.sleep(5)
-    
-    # In ra thông báo để nhập mã xác minh
-    print("Nhập mã xác minh từ email:", flush=True)  # Đảm bảo in ra ngay lập tức
-    time.sleep(10)  # Thêm một chút thời gian để chắc chắn dòng chữ hiển thị
-    
-    # Tạm dừng để nhập mã xác minh thủ công
-    verification_code = input("Nhập mã xác minh từ email: ", flush=True)
+    time.sleep(15)
     
     #nhập pass
     driver.find_element(By.ID, "np").send_keys("12345")
     driver.find_element(By.ID, "rnp").send_keys("12345")
     
-    #Nhập mã xác minh
-    driver.find_element(By.ID, "vcode").send_keys(verification_code)
+    time.sleep(5)
     
-    #Nhấn nút đổi mật khẩu
-    driver.find_element(By.CLASS_NAME, "btn-primary").click()
+    #Nhấn nút reset 
+    click_reset_button_and_accept_alert(driver)
+    
+    driver.find_element(By.ID, "password").clear()
+    driver.find_element(By.ID, "password").send_keys("12345")
+    driver.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
+    
+    WebDriverWait(driver, 10).until(EC.url_to_be("http://localhost/PHP_E_Commerce_Web_Application_MySQL/bookshop/home.php"))
+    assert driver.current_url == "http://localhost/PHP_E_Commerce_Web_Application_MySQL/bookshop/home.php"
     time.sleep(3)
+
 #TC02: Bỏ trống email rồi nhấn Forget Password
 def test_forgot_password_empty_email(driver):
     go_to_sign_in_page(driver)
